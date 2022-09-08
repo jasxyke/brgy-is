@@ -1,0 +1,84 @@
+:root{
+    --bg-white: #FDF5DF;
+    --title-blue: #5EBEC4;
+    --function-pink: #F92C85;
+}
+
+html,body{
+    width: 100%;
+}
+
+.main-container{
+    display: block;
+
+}
+
+.view{
+    display:grid;
+    grid-template-rows: 20% 70% 10%;
+    padding: 25px 40px;
+    
+}
+
+.title-header-box{
+    padding: 15px 15px;
+    background-color: var(--bg-white);
+}
+.title-header{
+    color: var(--title-blue);
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.views-container{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    width: 100%;
+}
+
+.view-title-box{
+    width: 100%;
+    padding: 50px;
+}
+
+.fam-members-list{
+    
+    width: 100%;
+    padding: 15px;
+    position: relative;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    border-radius: 15px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.member-box{
+    padding: 10px 15px;
+    margin: 5px 0px;
+    box-sizing: border-box;
+
+}
+
+.btn-box{
+    text-align: right;
+    width: 100%;
+}
+
+
+
+.form-box{
+    padding: 15px 20px;
+    height: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    grid-row: 2 / span 3;
+}
+
+.add-btn{
+    text-align: left;
+    margin-left: 20px;
+}

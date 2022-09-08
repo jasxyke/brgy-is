@@ -1,0 +1,93 @@
+:root{
+    --bg-white: #FDF5DF;
+    --title-blue: #5EBEC4;
+    --function-pink: #F92C85;
+}
+
+.title-header-box{
+    padding: 15px 15px;
+    background-color: var(--bg-white);
+}
+.title-header{
+    color: var(--title-blue);
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.submit-btn{
+    background-color: var(--function-pink);
+    color: white;
+}
+
+.poppins{
+    font-family: 'Poppins', sans-serif;
+}
+
+.ubuntu{
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.sm{
+    font-size: 1.2rem;
+}
+
+.mid{
+    font-size: 1.8rem;
+}
+
+.lg{
+    font-size: 2.8rem;
+}
+
+.header-title{
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    line-height: 60%;
+}
+
+.sub-header{
+    font-size: 1.2rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.view-title-box{
+    width: 100%;
+    padding: 50px;
+}
+
+.my-nav-link{
+    color: gray;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.active-link{
+    border-style: none;
+    background-color: #F92C85;
+    border-radius: 10px;
+    color: white
+}
+
+.content-box{
+    padding: 0px 70px;
+}
+
+.text-white{
+    color: white;
+}
+
+.sql-err{
+    animation-name: sql-error;
+    animation-duration: 5s;
+    animation-delay: 2s;
+    position: absolute;
+}
+
+@keyframes sql-error{
+    from{top:0px;}
+    to{top:100px;}
+}
+
+.btn-color{
+    background-color: var(--function-pink);
+    color: white;
+    border-style: none;
+}

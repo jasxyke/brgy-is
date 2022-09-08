@@ -1,0 +1,38 @@
+:root{
+    --bg-white: #FDF5DF;
+    --title-blue: #5EBEC4;
+    --function-pink: #F92C85;
+}
+
+.header-section{
+    color: var(--title-blue);
+    font-family: 'Ubuntu', sans-serif;
+}
+.form-section{
+    height: 100%;
+    margin-top: 7vh;
+}
+
+.main-container{
+    height: 100%;
+    padding: 100px;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    box-sizing: border-box;
+    align-content: center;
+    background-color: var(--bg-white);
+    border-radius: 5%;
+
+}
+
+.login-container{
+    padding: 10px 50px;
+}
+
+.error_msg{
+    
+}
+
+.error-input{
+    
+}

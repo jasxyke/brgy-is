@@ -1,0 +1,5 @@
+const members = [];
+
+function addMember(){
+    
+}

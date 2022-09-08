@@ -1,0 +1,38 @@
+:root{
+    --bg-white: #FDF5DF;
+    --title-blue: #5EBEC4;
+    --function-pink: #F92C85;
+}
+
+p{
+    word-wrap: break-word;
+}
+
+section{
+    padding: 20px 50px;
+}
+
+.main-container{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.fam-section{
+    border-right: 1px solid red;
+}
+
+.fam-details{
+    padding: 0px 70px;
+    position: relative;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+}
+
+.detail{
+    height: auto;
+}
+
+.detail p{
+    display: inline-block;
+}

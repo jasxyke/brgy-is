@@ -1,17 +1,16 @@
 <?php 
 
 //initialize the session
-session_start();
 
 //include the config file
 require_once "config.php";
 require_once "resident.php";
-
+session_start();
 //variables sheesh
 $famID = $_SESSION["id"];
-$username = $_SESSION["username"];
-$famname = $_SESSION["famname"];
-$address = $_SESSION["address"];
+    $username = $_SESSION["username"];
+    $famname = $_SESSION["famname"];
+    $address = $_SESSION["address"];
 
 //initialize form variables
 $lastname = $firstname = $midname = "";
@@ -21,46 +20,77 @@ $birthdate = $occupation = $mobilenum = $email = $vaccState = "";
 $birthdate_err = $occupation_err = $mobilenum_err = $email_err = $vaccState_err = "";
 
 
-/*
-//prepare an sql statement to retrive the list of family members
-$sql = "SELECT residentID, firstName, middleName, lastName, mobileNum 
-FROM residents_t 
-WHERE familyID = ?";
+//process form date when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    
+    // validate lastname
+    if(empty(trim($_POST["lastname"]))){
+        $lastname_err = "Please enter lastname.";
+    } else{
+        $lastname = trim($_POST["lastname"]);
+    }
 
-if($stmt = mysqli_prepare($link, $sql)){
-    //bind bariables to the prepared statement as parameters
-    mysqli_stmt_bind_param($stmt, "s", $param_famID);
+    // validate firstname
+    if(empty(trim($_POST["firstname"]))){
+        $firstname_err = "Please enter firstname.";
+    } else{
+        $firstname = trim($_POST["firstname"]);
+    }
 
-    //set parameters
-    $param_famID = $famID;
+    // validate middle name
+    if(empty(trim($_POST["midname"]))){
+        $midname_err = "Please enter middlename.";
+    } else{
+        $midname = trim($_POST["midname"]);
+    }
 
-    //atempt to execute the prepared statement
-    if(mysqli_stmt_execute($stmt)){
-        //store result
-        mysqli_stmt_store_result($stmt);
+    // validate birthday
+    if(empty(trim($_POST["birthday"]))){
+        $birthdate_err = "Please enter your birthday.";
+    } else{
+        $birthdate = trim($_POST["birthday"]);
+    }
 
-        //check if the result is more than 0
-        if($stmt->num_rows > 0){
-            //resident array
-            $residents = array();
-            //store data of each resident/row
-            while($row = $stmt->fetch_assoc()){
-                $resident = new Resident($famID, $row["lastName"], $row["firstName"], 
-                $row["middleName"], $row["mobileNum"]);
-                array_push($residents, $resident);
-            }
+    // validate occupation
+    if(empty(trim($_POST["occupation"]))){
+        $occupation_err = "Please enter your occupation.";
+    } else{
+        $occupation = trim($_POST["occupation"]);
+    }
 
+    // validate mobile number
+    if(empty(trim($_POST["mobilenum"]))){
+        $mobilenum_err = "Please enter your mobilenum.";
+    } else{
+        $mobilenum = trim($_POST["mobilenum"]);
+    }
+
+    // validate mobile number
+    $email = $_POST["email"];
+
+    // validate vaccination state
+    if(empty(trim($_POST["vaccstate"]))){
+        $vaccState = "Please select your vaccination state.";
+    } else{
+        $vaccState = trim($_POST["vaccstate"]);
+    }
+
+    if(empty($lastname_err) && empty($firstname_err) && empty($midname_err) && 
+    empty($birthdate_err) && empty($occupation_err) && empty($mobilenum_err)){
+        
+        //create/update the list of members variable from the session variable
+        if(isset($_SESSION["members"]) && is_array($_SESSION["members"])){
+            $member = new Resident($famID, $lastname, $firstname, $midname, 
+            $mobilenum, $birthdate, $occupation,$email,$vaccState);
+            array_push($_SESSION["members"],$member);
         }
         else{
+            $member = new Resident($famID, $lastname, $firstname, $midname, 
+            $mobilenum, $birthdate, $occupation,$email,$vaccState);
+            $_SESSION["members"] = array($member);
         }
-
-
-    }
-    else{
-        echo "Oops! Something went wrong please try again later.";
     }
 }
-*/
 ?>
 
 <!DOCTYPE html>
@@ -96,8 +126,8 @@ if($stmt = mysqli_prepare($link, $sql)){
         <div class="views-container">
             <div class="view">
                 <div class="view-title-box">
-                    <p class="header-title">Family Name</p>
-                    <p class="sub-header">54 street</p>
+                    <p class="header-title"><?php echo $famname?></p>
+                    <p class="sub-header"><?php echo $address?></p>
                 </div>
                 <div class="fam-members-list border border-2">
                     <p class="mid poppins">Family Members</p>
@@ -109,18 +139,28 @@ if($stmt = mysqli_prepare($link, $sql)){
                     -->
                     <?php
                         if(isset($_SESSION["members"])){
+                            $count = 0;
                             foreach($_SESSION["members"] as $member){
-                            echo "<div class='member-box'>
+                            echo "<div class='member-box border-top border-bottom border-1'>
+                                    <div class='member-detail'>
                                     <p class='h5'>" . $member->getFullname() . "</p>" .
                                     "<p class'h6 poppins'>" . $member->getMobilenum() . "</p>" .
-                                "</div>";
+                                  "</div>" .
+                                  "<form action='DeleteResident.php' method='post'>" .
+                                    "<input type='hidden' name='index' value='". $count . "'>".
+                                    "<input type='submit' value='Remove' class='btn submit-btn'>" .
+                                    "</form>" . 
+                                        "</div>";
+                                        $count++;
                         }
                         }
                         
                     ?>
                 </div>
                 <div class="btn-box">
-                    <button type="button" class="btn submit-btn mt-4 me-2">Done</button>
+                    <form action="saveMembers.php" method="post">
+                    <input type="submit" value="Done" class="btn submit-btn mt-4 me-2">
+                    </form>
                 </div>
             </div>
             <div class="view">
@@ -130,7 +170,7 @@ if($stmt = mysqli_prepare($link, $sql)){
                         of every member in the family</p>
                 </div>
                 <div class="form-box">
-                <form action="addMember.php" method="post">
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <div class="input-group mb-3">
                         <span class="input-group-text">Name</span>
                         <input type="text" class="form-control" id="lastname" 
@@ -159,9 +199,9 @@ if($stmt = mysqli_prepare($link, $sql)){
                     </div>
                     <div class="mb-3 mt-3">
                         <label for="mobilenum" class="form-label">Mobile Number</label>
-                        <input type="tel" class="form-control" id="mobilenum" 
-                        placeholder="0912-345-6789" name="mobile" 
-                        pattern="[0-9]{11}" required>
+                        <input type="text" class="form-control" id="mobilenum" 
+                        placeholder="09#########" name="mobilenum" 
+                         required>
                     </div>
                     <div class="mb-3 mt-3">
                         <label for="email" class="form-label">Email Address(optional)</label>
@@ -172,7 +212,7 @@ if($stmt = mysqli_prepare($link, $sql)){
                         <p>Vaccination State</p>
                         <div class="form-check">
                         <input type="radio" class="form-check-input" id="unvacc" name="vaccstate"
-                        value="unvaccinated">
+                        value="unvaccinated" required>
                         <label for="unvacc" class="form-check-label" >Unvaccinated</label>
                         </div>
                         <div class="form-check">

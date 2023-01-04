@@ -3,10 +3,10 @@
 session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: home.php");
-    exit;
-}
+// if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+//     header("location: home.php");
+//     exit;
+// }
  
 // Include config file
 require_once "config.php";
@@ -36,7 +36,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
         $sql = "SELECT familyID, famUser, famPass, setupDone, famDisplayName, 
-        address FROM family_t WHERE famUser = ?";
+        address, famEmail FROM family_t WHERE famUser = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -54,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, 
-                    $setupDone, $famname, $address);
+                    $setupDone, $famname, $address, $famEmail);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
@@ -65,15 +65,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;   
                             $_SESSION["famname"]  = $famname;
-                            $_SESSION["address"] = $address;                        
+                            $_SESSION["address"] = $address;
+                            $_SESSION["famEmail"] = $famEmail;                        
                             
                             if($setupDone){
                                 // Redirect user to welcome page
                                 header("location: home.php");
                             }
                             else{
-                                header("location: home.php");
-                                //header("location: fam-setup.php");
+                                header("location: fam-setup.php");
                             }
                             
                             

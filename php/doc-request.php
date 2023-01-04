@@ -1,5 +1,9 @@
-
-
+<?php
+$requested = 0;
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $requested = 1;
+}
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -45,7 +49,7 @@
                     <p class="sub-header">A form to request a document for a family member</p>
                 </div>
             <div class="form-box">
-                <form action="doc-req.php" method="post">
+                <form action="doc-request.php" method="post">
                     <div class="mb-3 mt-3">
                         <label for="fam-members" class="form-label">Who is requesting the document?</label>
                         <select name="fam-members" class="form-select" id="cars">
@@ -70,9 +74,19 @@
                         <label for="purpose" class="form-label">Purpose(saan gagamitin?)</label>
                         <input type="text" class="form-control" id="purpose" placeholder="purpose"
                         name="purpose">
+                        <input type="submit" value="Submit" class="btn submit-btn mt-5">
                     </div>
                     </div>
                 </form>
+<?php
+            if($requested){
+                echo "<div class='alert alert-success'>
+    <strong>Success!</strong> We have received your request, a message via text message will
+     be sent when the document is ready.
+    </div>";
+            }   
+    ?>
             </div>
+            
         </div>
     </body>

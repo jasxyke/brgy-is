@@ -16,12 +16,16 @@ class Resident{
 
     //constructor
     function __construct(int $famID, string $lastname, string $firstname, 
-    string $middlename, string $mobilenum){
+    string $middlename, string $mobilenum, $birthdate, $occupation, $email, $vaccState){
         $this->famID = $famID;
         $this->lastname = $lastname;
         $this->firstname = $firstname;
         $this->middlename = $middlename;
         $this->mobilenum = $mobilenum;
+        $this->birthdate = $birthdate;
+        $this->occupation = $occupation;
+        $this->email = $email;
+        $this->vaccState = $vaccState;
     }
 
     public function getFullname(){
@@ -73,6 +77,10 @@ class Resident{
     ////////////
     //SETTERS//
     //////////
+
+    public function setResidentID($ID){
+        $this->residentID = $ID;
+    }
     public function setfamID($ID){
         $this->famID = $ID;
     }

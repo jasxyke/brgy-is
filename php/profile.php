@@ -1,5 +1,32 @@
 
+<?php
+    require_once "config.php";
+    require_once "resident.php";
+    session_start();
 
+    $famID = $_SESSION["id"];
+    $famname = $_SESSION["famname"];
+    $username = $_SESSION["username"];
+    $address = $_SESSION["address"];
+    $famEmail = $_SESSION["famEmail"];
+    $members = array();
+
+    $sql = "SELECT * FROM residents_t WHERE familyID = " . $famID;
+
+    if($query = mysqli_query($link, $sql)){
+        while($member = mysqli_fetch_assoc($query)){
+            $fam = new Resident($famID, $member["lastName"], $member["firstName"], $member["middleName"],
+        $member["mobileNum"], $member["birthdate"], $member["occupation"], $member["emailAdd"], 
+        $member["vaccinationState"]);
+            $fam->setResidentID($member["residentID"]);
+            array_push($members, $fam);
+        }
+    }
+    else{
+        //do something when sql connection failed
+    }
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,7 +53,7 @@
         <script scr="/BrgyIS/js/jquery.js" type="text/javascript"></script>
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm title-header-box" >
+    <nav class="navbar navbar-expand-sm title-header-box" >
             <div class="container-fluid">
                 <img src="/BrgyIS/pics/logo.png" style="width: 40px;" alt="logo" class="rounded-pill">
                 <a class="navbar-brand title-header" href="home.php">Barangay Pag-Asa Family I.S.</a>
@@ -37,25 +64,26 @@
                 <li class="nav-item"><a class="nav-link my-nav-link" href="doc-request.php">Request Docoment</a></li>
             </ul>
             </div>
+            <a href="logout.php" class="btn btn-color">Logout</a>
             </div>
         </nav>
         <div class="main-container">
             <section class="fam-section">
                 <div class="view-title-box">
-                    <p id="fam-name" class="display-2">Family Name</p>
+                    <p id="fam-name" class="display-2"><?php echo $famname?></p>
                 </div>
                 <div class="fam-details">
                     <div class="detail">
                         <p class="mid poppins">Username: </p>
-                        <p class="sm ms-3" id="username">jasxyke</p>
+                        <p class="sm ms-3" id="username"><?php echo $username?></p>
                     </div>
                     <div class="detail">
                         <p class="mid poppins">Adress: </p>
-                        <p class="sm ms-3" id="address">54 pag-asa street</p>
+                        <p class="sm ms-3" id="address"><?php echo $address?></p>
                     </div>
                     <div class="detail">
                         <p class="mid poppins">Email Address: </p>
-                        <p class="sm ms-3" id="username">jasxyke</p>
+                        <p class="sm ms-3" id="username"><?php echo $famEmail?></p>
                     </div>
                 </div>
             </section>
@@ -64,21 +92,28 @@
                     <p id="fam-name" class="display-4">Family Members</p>
                 </div>
                 <div id="accordion" class="content-box">
-                    <div class="card">
-                    <div class="card-header">
-                        <a class="btn collapsed" data-bs-toggle="collapse"
-                        href="#residentid">Jaspher Xyke M. Cortez</a>
+                    <?php 
+                    $today = date("Y-m-d");
+                    foreach($members as $member){
+                        echo "
+                    <div class='card'>
+                    <div class='card-header'>
+                        <a class='btn' data-bs-toggle='collapse'
+                        href='#card-". $member->getResidentID() ."'>". $member->getFullname() ."</a>
                     </div>
-                    <div id="residentid" class="collapse" data-bs-parent="#accordion">
-                        <div class="card-body">
-                            <p><b>Name:</b> Cortez, Jaspher Xyke M.</p>
-                            <p>Age: 20</p>
-                            <p>Occupation: Student</p>
-                            <p>Mobile Number: 043123</p>
-                            <p>Email Address: jasxyke</p>
-                            <p>Vaccination State: vaccinated</p>
+                    <div id='card-". $member->getResidentID() ."' class='collapse' data-bs-parent='#accordion'>
+                        <div class='card-body'>
+                            <p><b>Name:</b>". $member->getFullname() ."</p>
+                            <p><b>Age:</b> ". date_diff(date_create($member->getBirthdate()), date_create($today))->format('%y') ."</p>
+                            <p><b>Occupation:</b> ". $member->getOccupation() ."</p>
+                            <p><b>Mobile Number:</b> ". $member->getMobilenum() ."</p>
+                            <p><b>Email Address:</b> ". $member->getEmail() . "</p>
+                            <p><b>Vaccination State:</b> ". $member->getVaccstate() . "</p>
                         </div>
-                    </div>
+                    </div></div>";
+                    }
+                    
+                ?>
                 </div>
             </section>
         </div>

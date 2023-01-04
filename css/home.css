@@ -16,13 +16,11 @@
 
 .invi-box{
     width: 30vw;
-    background-color: #F92C85;
 }
 
 .announce-box{
     width: 25vw;
     height: 700px;
-    border: 1px solid black;
 }
 
 .socmed-box{
@@ -56,11 +54,19 @@
 
 .post-header{
     font-size: 1.2rem;
-    color: var(--title-blue);
+}
+
+.ann-header{
+    font-size: 1.2rem;
+    color:var(--title-blue);
 }
 
 .post-date{
     line-height: 20%;
+}
+
+.fb-post{
+    margin-bottom: 50px;
 }
 
 
